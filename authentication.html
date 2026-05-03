@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPredict — Sign In</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue:       #3558D6;
+            --blue-light: #EEF2FF;
+            --blue-mid:   #C7D2FE;
+            --blue-dark:  #2244B8;
+            --gray-50:    #F8F9FA;
+            --gray-100:   #F1F3F5;
+            --gray-200:   #E9ECEF;
+            --gray-300:   #DEE2E6;
+            --gray-500:   #868E96;
+            --gray-700:   #495057;
+            --gray-900:   #212529;
+            --white:      #FFFFFF;
+            --success:    #2F9E44;
+            --error:      #C92A2A;
+            --radius:     12px;
+            --shadow-sm:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md:  0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-900);
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        /* ── Left panel ── */
+        .left-panel {
+            background: var(--blue);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            top: -120px;
+            right: -120px;
+            width: 400px;
+            height: 400px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 50%;
+        }
+
+        .left-panel::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -60px;
+            width: 280px;
+            height: 280px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+        }
+
+        .brand {
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-name {
+            font-family: 'Fraunces', serif;
+            font-size: 2.4rem;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .brand-name span {
+            font-style: italic;
+            font-weight: 400;
+        }
+
+        .brand-tagline {
+            color: rgba(255,255,255,0.65);
+            font-size: 0.9rem;
+            font-weight: 400;
+            margin-top: 0.5rem;
+            letter-spacing: 0.01em;
+        }
+
+        .left-divider {
+            width: 48px;
+            height: 2px;
+            background: rgba(255,255,255,0.25);
+            margin: 2.5rem 0;
+        }
+
+        .left-headline {
+            font-family: 'Fraunces', serif;
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: #fff;
+            line-height: 1.3;
+            letter-spacing: -0.02em;
+        }
+
+        .left-headline em {
+            font-style: italic;
+            color: rgba(255,255,255,0.75);
+        }
+
+        .left-body {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.92rem;
+            line-height: 1.7;
+            margin-top: 1rem;
+            max-width: 340px;
+        }
+
+        .features {
+            margin-top: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.87rem;
+            font-weight: 500;
+        }
+
+        .feature-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.45);
+            flex-shrink: 0;
+        }
+
+        /* ── Right panel ── */
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 2rem;
+            background: var(--white);
+        }
+
+        .auth-box {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .auth-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            letter-spacing: -0.02em;
+            margin-bottom: 0.4rem;
+        }
+
+        .auth-subtitle {
+            color: var(--gray-500);
+            font-size: 0.88rem;
+            margin-bottom: 2rem;
+        }
+
+        /* ── Tabs ── */
+        .tabs {
+            display: flex;
+            background: var(--gray-100);
+            border-radius: 10px;
+            padding: 4px;
+            margin-bottom: 1.8rem;
+            gap: 4px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.55rem 1rem;
+            border: none;
+            border-radius: 7px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            color: var(--gray-500);
+        }
+
+        .tab-btn.active {
+            background: var(--white);
+            color: var(--blue);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* ── Form ── */
+        form { display: flex; flex-direction: column; gap: 1.1rem; }
+
+        .field { display: flex; flex-direction: column; gap: 0.4rem; }
+
+        label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            letter-spacing: 0.03em;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            background: var(--gray-50);
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius);
+            padding: 0.7rem 0.95rem;
+            color: var(--gray-900);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.92rem;
+            outline: none;
+            transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+            width: 100%;
+        }
+
+        input::placeholder { color: var(--gray-300); }
+
+        input:focus {
+            border-color: var(--blue);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(53,88,214,0.08);
+        }
+
+        /* ── Submit button ── */
+        .submit-btn {
+            margin-top: 0.3rem;
+            padding: 0.78rem 1rem;
+            background: var(--blue);
+            border: none;
+            border-radius: var(--radius);
+            color: #fff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            background: var(--blue-dark);
+            box-shadow: 0 4px 14px rgba(53,88,214,0.28);
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:active { transform: translateY(0); box-shadow: none; }
+
+        .submit-btn:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+
+        /* Spinner */
+        .btn-spinner {
+            display: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.35);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .submit-btn.loading .btn-text { display: none; }
+        .submit-btn.loading .btn-spinner { display: block; }
+
+        /* ── Footer note ── */
+        .note {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-top: 1.1rem;
+        }
+
+        /* ── Alert ── */
+        .alert {
+            display: none;
+            padding: 0.65rem 0.9rem;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 500;
+        }
+
+        .alert.error {
+            background: #FFF5F5;
+            border: 1px solid #FFC9C9;
+            color: var(--error);
+        }
+
+        .alert.success {
+            background: #EBFBEE;
+            border: 1px solid #B2F2BB;
+            color: var(--success);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 820px) {
+            body { grid-template-columns: 1fr; }
+            .left-panel { display: none; }
+            .right-panel { padding: 2rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Left Info Panel -->
+    <div class="left-panel">
+        <div class="brand">
+            <div class="brand-name">Edu<span>Predict</span></div>
+            <div class="brand-tagline">Student Performance Forecasting</div>
+        </div>
+
+        <div class="left-divider"></div>
+
+        <div class="left-headline">
+            Know how your<br>students will <em>perform</em><br>before results day.
+        </div>
+
+        <p class="left-body">
+            Upload your class's data in Excel format and get a detailed PDF report with predicted final scores for every student — in seconds.
+        </p>
+
+        <div class="features">
+            <div class="feature-item">
+                <div class="feature-dot"></div>
+                Upload class data as an Excel spreadsheet
+            </div>
+            <div class="feature-item">
+                <div class="feature-dot"></div>
+                AI-powered score prediction per student
+            </div>
+            <div class="feature-item">
+                <div class="feature-dot"></div>
+                Download a clean, printable PDF report
+            </div>
+            <div class="feature-item">
+                <div class="feature-dot"></div>
+                Generate sample data to try it instantly
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Auth Panel -->
+    <div class="right-panel">
+        <div class="auth-box">
+            <div class="auth-title">Welcome</div>
+            <p class="auth-subtitle">Sign in or create an account to continue</p>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" id="signupTab">Create Account</button>
+                <button class="tab-btn" id="loginTab">Sign In</button>
+            </div>
+
+            <!-- Alert -->
+            <div class="alert" id="alertBox"></div>
+
+            <!-- Sign Up Form -->
+            <form id="signupForm">
+                <div class="field">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required placeholder="e.g. john_doe">
+                </div>
+                <div class="field">
+                    <label for="signupEmail">Email address</label>
+                    <input type="email" id="signupEmail" name="email" required placeholder="you@gmail.com">
+                </div>
+                <div class="field">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" name="password" required placeholder="Min. 8 characters">
+                </div>
+                <button type="submit" class="submit-btn" id="signupBtn">
+                    <span class="btn-text">Create Account</span>
+                    <div class="btn-spinner"></div>
+                </button>
+                <p class="note">Supports Gmail, Yahoo &amp; Outlook addresses only</p>
+            </form>
+
+            <!-- Login Form -->
+            <form id="loginForm" style="display:none">
+                <div class="field">
+                    <label for="loginEmail">Email address</label>
+                    <input type="email" id="loginEmail" name="email" required placeholder="you@gmail.com">
+                </div>
+                <div class="field">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" name="password" required placeholder="Your password">
+                </div>
+                <button type="submit" class="submit-btn" id="loginBtn">
+                    <span class="btn-text">Sign In</span>
+                    <div class="btn-spinner"></div>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        const signupTab  = document.getElementById('signupTab')
+        const loginTab   = document.getElementById('loginTab')
+        const signupForm = document.getElementById('signupForm')
+        const loginForm  = document.getElementById('loginForm')
+        const alertBox   = document.getElementById('alertBox')
+
+        function showAlert(msg, type = 'error') {
+            alertBox.textContent = msg
+            alertBox.className = `alert ${type}`
+            alertBox.style.display = 'block'
+            alertBox.style.marginBottom = '1rem'
+        }
+
+        function hideAlert() {
+            alertBox.style.display = 'none'
+        }
+
+        signupTab.addEventListener('click', () => {
+            signupTab.classList.add('active')
+            loginTab.classList.remove('active')
+            signupForm.style.display = 'flex'
+            loginForm.style.display  = 'none'
+            hideAlert()
+        })
+
+        loginTab.addEventListener('click', () => {
+            loginTab.classList.add('active')
+            signupTab.classList.remove('active')
+            loginForm.style.display  = 'flex'
+            signupForm.style.display = 'none'
+            hideAlert()
+        })
+
+        function setLoading(btn, on) {
+            on ? btn.classList.add('loading') : btn.classList.remove('loading')
+            btn.disabled = on
+        }
+
+        async function signupUser(userData) {
+            const btn = document.getElementById('signupBtn')
+            setLoading(btn, true)
+            hideAlert()
+            try {
+                localStorage.removeItem('currentUser')
+                const response = await fetch(`${BASE_URL}/signup`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(userData)
+                })
+                const result = await response.json()
+                if (response.ok) {
+                    try { localStorage.setItem('token', result.access_token) } catch(e) {}
+                    window.location.href = 'index.html'
+                } else {
+                    const msg = result.detail?.[0]?.msg?.replace('Value error, ', '') || result.detail || 'Signup failed.'
+                    showAlert(msg)
+                }
+            } catch {
+                showAlert('Could not connect to server. Please try again later.')
+            } finally {
+                setLoading(btn, false)
+            }
+        }
+
+        async function loginUser(userData) {
+            const btn = document.getElementById('loginBtn')
+            setLoading(btn, true)
+            hideAlert()
+            try {
+                localStorage.removeItem('currentUser')
+                const response = await fetch(`${BASE_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(userData)
+                })
+                const result = await response.json()
+                if (response.ok) {
+                    try { localStorage.setItem('token', result.access_token) } catch(e) { return }
+                    window.location.href = 'index.html'
+                } else {
+                    const msg = result.detail?.[0]?.msg?.replace('Value error, ', '') || result.detail || 'Login failed.'
+                    showAlert(msg)
+                }
+            } catch {
+                showAlert('Could not connect to server. Please try again later.')
+            } finally {
+                setLoading(btn, false)
+            }
+        }
+
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault()
+            await signupUser({
+                username: document.getElementById('username').value,
+                email:    document.getElementById('signupEmail').value,
+                password: document.getElementById('signupPassword').value
+            })
+        })
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault()
+            await loginUser({
+                email:    document.getElementById('loginEmail').value,
+                password: document.getElementById('loginPassword').value
+            })
+        })
+    </script>
+</body>
+</html>

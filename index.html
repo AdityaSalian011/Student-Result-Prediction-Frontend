@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPredict — Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue:       #3558D6;
+            --blue-light: #EEF2FF;
+            --blue-mid:   #C7D2FE;
+            --blue-dark:  #2244B8;
+            --gray-50:    #F8F9FA;
+            --gray-100:   #F1F3F5;
+            --gray-200:   #E9ECEF;
+            --gray-300:   #DEE2E6;
+            --gray-400:   #CED4DA;
+            --gray-500:   #868E96;
+            --gray-700:   #495057;
+            --gray-900:   #212529;
+            --white:      #FFFFFF;
+            --success:    #2F9E44;
+            --success-bg: #EBFBEE;
+            --success-border: #B2F2BB;
+            --error:      #C92A2A;
+            --error-bg:   #FFF5F5;
+            --error-border: #FFC9C9;
+            --radius:     12px;
+            --shadow-sm:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md:  0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+            --shadow-lg:  0 12px 40px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-900);
+            min-height: 100vh;
+        }
+
+        /* ── Navbar ── */
+        .navbar {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 0 2rem;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            font-family: 'Fraunces', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--blue);
+            letter-spacing: -0.02em;
+        }
+
+        .nav-brand span { font-style: italic; font-weight: 400; }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-label {
+            font-size: 0.82rem;
+            color: var(--gray-500);
+        }
+
+        .logout-btn {
+            padding: 0.45rem 1.1rem;
+            background: transparent;
+            border: 1.5px solid var(--gray-300);
+            border-radius: 8px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.83rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+
+        .logout-btn:hover {
+            border-color: var(--gray-400);
+            background: var(--gray-50);
+            color: var(--gray-900);
+        }
+
+        /* ── Main layout ── */
+        .main {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 5rem;
+        }
+
+        /* ── Page header ── */
+        .page-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Fraunces', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            letter-spacing: -0.025em;
+            line-height: 1.2;
+        }
+
+        .page-header p {
+            color: var(--gray-500);
+            font-size: 0.93rem;
+            margin-top: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* ── Cards ── */
+        .card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card + .card { margin-top: 1.25rem; }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.1rem;
+        }
+
+        .card-icon.blue { background: var(--blue-light); }
+        .card-icon.green { background: #EBFBEE; }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            letter-spacing: -0.01em;
+        }
+
+        .card-desc {
+            font-size: 0.83rem;
+            color: var(--gray-500);
+            margin-top: 0.2rem;
+            line-height: 1.5;
+        }
+
+        /* ── Upload zone ── */
+        .upload-zone {
+            border: 2px dashed var(--gray-300);
+            border-radius: 12px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            position: relative;
+        }
+
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            border-color: var(--blue);
+            background: var(--blue-light);
+        }
+
+        .upload-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .upload-text {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .upload-hint {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            margin-top: 0.3rem;
+        }
+
+        .upload-filename {
+            display: none;
+            margin-top: 1rem;
+            padding: 0.5rem 0.9rem;
+            background: var(--blue-light);
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--blue);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        #filenameLabel { display: none; }
+
+        /* ── Action row ── */
+        .action-row {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 0.72rem 1.5rem;
+            background: var(--blue);
+            border: none;
+            border-radius: var(--radius);
+            color: #fff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background: var(--blue-dark);
+            box-shadow: 0 4px 14px rgba(53,88,214,0.28);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:active { transform: translateY(0); box-shadow: none; }
+        .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .btn-secondary {
+            padding: 0.72rem 1.3rem;
+            background: var(--white);
+            border: 1.5px solid var(--gray-300);
+            border-radius: var(--radius);
+            color: var(--gray-700);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--gray-400);
+            background: var(--gray-50);
+            color: var(--gray-900);
+        }
+
+        .btn-success {
+            padding: 0.72rem 1.5rem;
+            background: var(--success);
+            border: none;
+            border-radius: var(--radius);
+            color: #fff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-success:hover {
+            background: #27843A;
+        }
+
+        /* ── Result banner ── */
+        .result-banner {
+            display: none;
+            margin-top: 1.1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .result-banner.success {
+            background: var(--success-bg);
+            border: 1px solid var(--success-border);
+            color: var(--success);
+        }
+
+        .result-banner.error {
+            background: var(--error-bg);
+            border: 1px solid var(--error-border);
+            color: var(--error);
+        }
+
+        /* ── Sample card ── */
+        .sample-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .sample-info .sample-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .sample-info .sample-desc {
+            font-size: 0.82rem;
+            color: var(--gray-500);
+            margin-top: 0.2rem;
+        }
+
+        /* ── How it works ── */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 0;
+        }
+
+        .step {
+            padding: 1.25rem;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--blue-light);
+            color: var(--blue);
+            font-size: 0.82rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.75rem;
+        }
+
+        .step-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .step-desc {
+            font-size: 0.78rem;
+            color: var(--gray-500);
+            margin-top: 0.3rem;
+            line-height: 1.5;
+        }
+
+        /* ─────────────────────────────────────────
+           LOADING OVERLAY
+        ───────────────────────────────────────── */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(248,249,250,0.92);
+            backdrop-filter: blur(6px);
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .loading-overlay.visible { display: flex; }
+
+        .loading-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 20px;
+            padding: 3rem 3.5rem;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Spinner ring */
+        .spinner-ring {
+            width: 56px;
+            height: 56px;
+            border: 3.5px solid var(--gray-200);
+            border-top-color: var(--blue);
+            border-radius: 50%;
+            animation: spinRing 0.8s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spinRing { to { transform: rotate(360deg); } }
+
+        .loading-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            letter-spacing: -0.02em;
+            margin-bottom: 0.4rem;
+        }
+
+        .loading-step {
+            font-size: 0.88rem;
+            color: var(--blue);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            min-height: 1.3em;
+            transition: opacity 0.3s;
+        }
+
+        /* Progress steps list */
+        .progress-steps {
+            list-style: none;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.84rem;
+            color: var(--gray-400);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .progress-step.done   { color: var(--success); }
+        .progress-step.active { color: var(--gray-900); }
+
+        .step-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid var(--gray-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.65rem;
+            transition: all 0.3s;
+        }
+
+        .progress-step.done .step-icon {
+            background: var(--success);
+            border-color: var(--success);
+            color: #fff;
+        }
+
+        .progress-step.active .step-icon {
+            border-color: var(--blue);
+            border-top-color: transparent;
+            animation: spinRing 0.7s linear infinite;
+        }
+
+        .loading-note {
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            color: var(--gray-400);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .main { padding: 2rem 1rem 4rem; }
+            .steps { grid-template-columns: 1fr; }
+            .action-row { flex-direction: column; }
+            .btn-primary, .btn-secondary, .btn-success { justify-content: center; }
+            .sample-card { flex-direction: column; align-items: flex-start; }
+            .loading-card { padding: 2rem 1.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-brand">Edu<span>Predict</span></div>
+        <div class="nav-right">
+            <span class="nav-label">Teacher Dashboard</span>
+            <button class="logout-btn" onclick="logOut()">Log out</button>
+        </div>
+    </nav>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-card">
+            <div class="spinner-ring"></div>
+            <div class="loading-title">Processing your file</div>
+            <div class="loading-step" id="loadingStep">Starting...</div>
+
+            <ul class="progress-steps" id="progressSteps">
+                <li class="progress-step" data-step="0">
+                    <div class="step-icon">1</div>
+                    Reading Excel file
+                </li>
+                <li class="progress-step" data-step="1">
+                    <div class="step-icon">2</div>
+                    Validating student data
+                </li>
+                <li class="progress-step" data-step="2">
+                    <div class="step-icon">3</div>
+                    Running score predictions
+                </li>
+                <li class="progress-step" data-step="3">
+                    <div class="step-icon">4</div>
+                    Generating feedback report
+                </li>
+                <li class="progress-step" data-step="4">
+                    <div class="step-icon">5</div>
+                    Preparing PDF for download
+                </li>
+            </ul>
+
+            <p class="loading-note">This usually takes 10–30 seconds.</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <!-- Page header -->
+        <div class="page-header">
+            <h1>Student Result Predictor</h1>
+            <p>Upload your class data as an Excel file and get predicted final scores in a downloadable PDF report.</p>
+        </div>
+
+        <!-- Upload card -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon blue">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3558D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="card-title">Upload Student Data</div>
+                    <div class="card-desc">Upload an Excel (.xlsx) file containing your students' scores and attendance data.</div>
+                </div>
+            </div>
+
+            <div class="upload-zone" id="uploadZone">
+                <input type="file" id="file-upload" accept=".xlsx">
+                <div class="upload-icon">📊</div>
+                <div class="upload-text">Click to choose a file, or drag & drop</div>
+                <div class="upload-hint">Accepts .xlsx files only</div>
+            </div>
+
+            <div id="filenameLabel" style="margin-top:0.9rem; display:none;">
+                <span style="background:var(--blue-light); color:var(--blue); font-size:0.82rem; font-weight:600; padding:0.4rem 0.85rem; border-radius:8px; display:inline-flex; align-items:center; gap:0.4rem;">
+                    📄 <span id="filenameTxt"></span>
+                </span>
+            </div>
+
+            <div class="action-row">
+                <button class="btn-primary" id="submitBtn" onclick="uploadFile()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/><polyline points="12 8 12 16"/><polyline points="8 12 12 8 16 12"/>
+                    </svg>
+                    Run Prediction
+                </button>
+                <button class="btn-success" id="download-btn" onclick="downloadReport()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Download Report (PDF)
+                </button>
+            </div>
+
+            <div class="result-banner" id="result"></div>
+        </div>
+
+        <!-- Sample data card -->
+        <div class="card">
+            <div class="sample-card">
+                <div style="display:flex;gap:1rem;align-items:center;">
+                    <div class="card-icon green">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2F9E44" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <path d="M9 9h6M9 13h6M9 17h4"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="sample-info">
+                            <div class="sample-title">Don't have a file yet?</div>
+                            <div class="sample-desc">Download a ready-made sample Excel file to see the expected format and try the predictor.</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-secondary" onclick="downloadSample()">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Get Sample File
+                </button>
+            </div>
+        </div>
+
+        <!-- How it works -->
+        <div class="card" style="margin-top:2rem;">
+            <div style="margin-bottom:1.25rem;">
+                <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--gray-500);margin-bottom:0.3rem;">How it works</div>
+                <div style="font-family:'Fraunces',serif;font-size:1.2rem;font-weight:600;color:var(--gray-900);letter-spacing:-0.02em;">Three simple steps</div>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-title">Upload your data</div>
+                    <div class="step-desc">Provide an Excel sheet with your class's attendance, assignment, and test scores.</div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-title">AI runs predictions</div>
+                    <div class="step-desc">Our model analyzes each student's data and predicts their final exam performance.</div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div class="step-title">Download the report</div>
+                    <div class="step-desc">Get a clean, per-student PDF report with scores, feedback, and at-risk flags.</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="config.js"></script>
+    <script>
+        const token = localStorage.getItem('token')
+
+        // ── Redirect if not logged in ─────────────────
+        if (!token) window.location.href = 'authentication.html'
+
+        function logOut() {
+            localStorage.removeItem('token')
+            window.location.href = 'authentication.html'
+        }
+
+        // ── File selection display ────────────────────
+        const fileInput = document.getElementById('file-upload')
+        const filenameLabel = document.getElementById('filenameLabel')
+        const filenameTxt = document.getElementById('filenameTxt')
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files[0]) {
+                filenameTxt.textContent = fileInput.files[0].name
+                filenameLabel.style.display = 'block'
+            }
+        })
+
+        // Drag & drop visual
+        const zone = document.getElementById('uploadZone')
+        zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover') })
+        zone.addEventListener('dragleave', () => zone.classList.remove('dragover'))
+        zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('dragover') })
+
+        // ── Loading screen helpers ────────────────────
+        const overlay   = document.getElementById('loadingOverlay')
+        const stepLabel = document.getElementById('loadingStep')
+        const stepItems = document.querySelectorAll('.progress-step')
+
+        const stepMessages = [
+            'Reading Excel file...',
+            'Validating student data...',
+            'Running score predictions...',
+            'Generating feedback report...',
+            'Preparing PDF for download...'
+        ]
+
+        let stepTimers = []
+
+        function showLoading() {
+            overlay.classList.add('visible')
+            // Reset all steps
+            stepItems.forEach(el => el.className = 'progress-step')
+            stepLabel.textContent = stepMessages[0]
+
+            // Simulate step-by-step progress (visual only)
+            const delays = [0, 3500, 9000, 14000, 20000]
+            delays.forEach((delay, i) => {
+                const t = setTimeout(() => {
+                    // Mark previous steps done
+                    for (let j = 0; j < i; j++) stepItems[j].className = 'progress-step done'
+                    // Activate current
+                    stepItems[i].className = 'progress-step active'
+                    stepLabel.textContent = stepMessages[i]
+                }, delay)
+                stepTimers.push(t)
+            })
+        }
+
+        function hideLoading() {
+            stepTimers.forEach(clearTimeout)
+            stepTimers = []
+            // Mark all done briefly
+            stepItems.forEach(el => el.className = 'progress-step done')
+            setTimeout(() => overlay.classList.remove('visible'), 400)
+        }
+
+        // ── Result banner ─────────────────────────────
+        function showResult(msg, type) {
+            const el = document.getElementById('result')
+            el.textContent = (type === 'success' ? '✓  ' : '✕  ') + msg
+            el.className = `result-banner ${type}`
+            el.style.display = 'flex'
+        }
+
+        function hideResult() {
+            document.getElementById('result').style.display = 'none'
+        }
+
+        // ── PDF state ─────────────────────────────────
+        let pdfBlobUrl = null
+
+        // ── Upload & predict ──────────────────────────
+        async function uploadFile() {
+            const file = fileInput.files[0]
+            if (!file) {
+                showResult('Please select an Excel file before running the prediction.', 'error')
+                return
+            }
+
+            hideResult()
+            document.getElementById('download-btn').style.display = 'none'
+            document.getElementById('submitBtn').disabled = true
+            showLoading()
+
+            const formData = new FormData()
+            formData.append('file', file)
+
+            try {
+                const res = await fetch(`${BASE_URL}/upload-file`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: formData
+                })
+
+                if (res.ok) {
+                    const blob = await res.blob()
+                    pdfBlobUrl = URL.createObjectURL(blob)
+                    hideLoading()
+                    showResult('Report is ready! Click "Download Report" to save it.', 'success')
+                    const dlBtn = document.getElementById('download-btn')
+                    dlBtn.style.display = 'inline-flex'
+                } else {
+                    const data = await res.json()
+                    hideLoading()
+                    if (res.status === 401) {
+                        showResult('Session expired. Please log in again.', 'error')
+                        setTimeout(() => window.location.href = 'authentication.html', 1800)
+                    } else {
+                        showResult(data.detail || 'Something went wrong. Please try again.', 'error')
+                    }
+                }
+            } catch(e) {
+                hideLoading()
+                showResult('Cannot reach the server. Make sure the backend is running.', 'error')
+            } finally {
+                document.getElementById('submitBtn').disabled = false
+            }
+        }
+
+        // ── Download report ───────────────────────────
+        function downloadReport() {
+            if (!pdfBlobUrl) return
+            const a = document.createElement('a')
+            a.href = pdfBlobUrl
+            a.download = 'student_report.pdf'
+            a.click()
+            URL.revokeObjectURL(pdfBlobUrl)
+            pdfBlobUrl = null
+            document.getElementById('download-btn').style.display = 'none'
+        }
+
+        // ── Download sample ───────────────────────────
+        async function downloadSample() {
+            try {
+                const res = await fetch(`${BASE_URL}/get-sample`)
+                if (res.ok) {
+                    const blob = await res.blob()
+                    const url = URL.createObjectURL(blob)
+                    const a = document.createElement('a')
+                    a.href = url
+                    a.download = 'student_sample.xlsx'
+                    a.click()
+                    URL.revokeObjectURL(url)
+                } else {
+                    const data = await res.json()
+                    showResult(data.detail || 'Failed to download sample.', 'error')
+                }
+            } catch(e) {
+                showResult('Cannot reach the server. Make sure the backend is running.', 'error')
+            }
+        }
+    </script>
+</body>
+</html>
