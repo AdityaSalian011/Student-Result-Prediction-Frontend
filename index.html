@@ -581,7 +581,7 @@
                 </div>
                 <div>
                     <div class="card-title">Upload Student Data</div>
-                    <div class="card-desc">Upload an Excel (.xlsx) file containing your students' scores and attendance data.</div>
+                    <div class="card-desc">Upload an Excel (.xlsx) file containing your students' data.</div>
                 </div>
             </div>
 
@@ -749,7 +749,9 @@
         // ── Result banner ─────────────────────────────
         function showResult(msg, type) {
             const el = document.getElementById('result')
-            el.textContent = (type === 'success' ? '✓  ' : '✕  ') + msg
+            const icon = type === 'success' ? '✓  ' : '✕  '
+            const formatted = msg.replace(/\n/g, '<br>')   
+            el.innerHTML = icon + formatted
             el.className = `result-banner ${type}`
             el.style.display = 'flex'
         }
