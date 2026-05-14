@@ -26,6 +26,9 @@
             --error:      #C92A2A;
             --error-bg:   #FFF5F5;
             --error-border: #FFC9C9;
+            --warning:        #E67700;
+            --warning-bg:     #FFF9DB;
+            --warning-border: #FFE066;
             --radius:     12px;
             --shadow-sm:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
             --shadow-md:  0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
@@ -325,6 +328,12 @@
             background: var(--error-bg);
             border: 1px solid var(--error-border);
             color: var(--error);
+        }
+
+        .result-banner.warning {
+            background: var(--warning-bg);
+            border: 1px solid var(--warning-border);
+            color: var(--warning);
         }
 
         /* ── Sample card ── */
@@ -749,7 +758,7 @@
         // ── Result banner ─────────────────────────────
         function showResult(msg, type) {
             const el = document.getElementById('result')
-            const icon = type === 'success' ? '✓  ' : '✕  '
+            const icon = type === 'success' ? '✓  ' : type === 'warning' ? '!  ' : '✕  '
             const formatted = msg.replace(/\n/g, '<br>')   
             el.innerHTML = icon + formatted
             el.className = `result-banner ${type}`
@@ -790,9 +799,15 @@
                     const blob = await res.blob()
                     pdfBlobUrl = URL.createObjectURL(blob)
                     hideLoading()
-                    showResult('Report is ready! Click "Download Report" to save it.', 'success')
                     const dlBtn = document.getElementById('download-btn')
                     dlBtn.style.display = 'inline-flex'
+
+                    const missingValues = res.headers.get('X-Missing-Values')
+                    if (missingValues) {
+                        showResult(missingValues, 'warning')
+                    } else {
+                        showResult('Report is ready! Click "Download Report" to save it.', 'success')
+                    }
                 } else {
                     const data = await res.json()
                     hideLoading()
